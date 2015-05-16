@@ -40,6 +40,8 @@ Note that this plugin is still in beta, some features may not work properly. Tha
 11. Role Manager
 
 == Changelog ==
+= 0.6.1 =
+* FIX  Warning: in_array() [function.in-array]: Wrong datatype for second argument 
 = 0.6 =
 * FIX Warning: Cannot modify header information - headers already sent... in wpadminui-core.php
 = 0.5 =

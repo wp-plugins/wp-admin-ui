@@ -40,7 +40,7 @@ register_deactivation_hook(__FILE__, 'wpui_deactivation');
 
 load_plugin_textdomain('wpui', false, basename( dirname( __FILE__ ) ) . '/lang' );
 
-define( 'WPUI_VERSION', '0.5' ); 
+define( 'WPUI_VERSION', '0.6.1' ); 
         
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 //Shortcut settings page

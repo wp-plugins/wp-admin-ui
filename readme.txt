@@ -4,7 +4,7 @@ Donate link: https://wpadminui.net/
 Tags: admin, ui, custom admin, admin menu, admin bar, metaboxes, widget, dashboard
 Requires at least: 4.0+
 Tested up to: 4.2
-Stable tag: 0.6
+Stable tag: 0.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

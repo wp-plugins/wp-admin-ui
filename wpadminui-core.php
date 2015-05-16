@@ -190,9 +190,9 @@ if (wpui_login_error_message() == '1') {
 		if(isset(wp_get_current_user()->roles[0])) {
 			$wpui_user_role = wp_get_current_user()->roles[0];
 		
-
 		//If current user role matchs values from wpui settings then apply
-		if( in_array( $wpui_user_role, wpui_roles_list_role())) {
+		if (wpui_roles_list_role() != '' ) {
+			if( in_array( $wpui_user_role, wpui_roles_list_role())) {
 
 //Global
 //=================================================================================================
@@ -2231,6 +2231,7 @@ function wpui_plugins_woo_updater() {
 if (wpui_plugins_woo_updater() == '1') {
 	remove_action('admin_notices', 'woothemes_updater_notice');
 }
+				}
 			}	
 		}
 	}

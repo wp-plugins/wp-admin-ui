@@ -20,14 +20,9 @@ function wpui_roles_list_role() {
 add_action('init', 'wpui_enable');
 function wpui_enable() {
 	global $pagenow;	
-	global $wp_roles;
-    
-    if (is_admin()) {
-		//Get current user role
-		$wpui_user_role = wp_get_current_user()->roles[0];
-
-		//If current user role matchs values from wpui settings then apply
-		if( in_array( $wpui_user_role, wpui_roles_list_role())) {
+    if ( in_array( $GLOBALS['pagenow'], array('wp-login.php', 'wp-register.php') ) ) {
+	    
+		
 		    
 		
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -187,6 +182,17 @@ if (wpui_login_error_message() == '1') {
 		return $error;
 	}
 }
+
+	} //Login Screen
+	elseif (is_admin()){
+	    global $wp_roles;
+		//Get current user role
+		if(isset(wp_get_current_user()->roles[0])) {
+			$wpui_user_role = wp_get_current_user()->roles[0];
+		
+
+		//If current user role matchs values from wpui settings then apply
+		if( in_array( $wpui_user_role, wpui_roles_list_role())) {
 
 //Global
 //=================================================================================================
@@ -2225,7 +2231,7 @@ function wpui_plugins_woo_updater() {
 if (wpui_plugins_woo_updater() == '1') {
 	remove_action('admin_notices', 'woothemes_updater_notice');
 }
-
+			}	
 		}
 	}
 }

@@ -3,7 +3,7 @@
 Plugin Name: WP Admin UI
 Plugin URI: http://wpadminui.net/
 Description: WP Admin UI
-Version: 0.6.1
+Version: 0.7
 Author: Benjamin DENIS
 Author URI: http://wpadminui.net/
 License: GPLv2
@@ -64,7 +64,7 @@ function wpui_plugin_action_links($links, $file) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-//Admin panel + Dashboard widget
+//Admin + Core
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 if ( is_admin() )

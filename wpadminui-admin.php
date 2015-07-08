@@ -43,6 +43,7 @@ class wpui_options
         add_submenu_page('wpui-option', 'Profil', 'Profil', 'manage_options', 'wpui-profil', array( $this,'wpui_profil_page'));
         add_submenu_page('wpui-option', 'Plugins', 'Plugins', 'manage_options', 'wpui-plugins', array( $this,'wpui_plugins_page'));
         add_submenu_page('wpui-option', 'Roles', 'Role Manager', 'manage_options', 'wpui-roles', array( $this,'wpui_roles_page'));
+        add_submenu_page('wpui-option', 'Import / Export settings', 'Import / Export', 'manage_options', 'wpui-import-export', array( $this,'wpui_import_export_page'));
     }
 
     function wpui_login_page(){
@@ -53,7 +54,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-login' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_global_page(){
         $this->options = get_option( 'wpui_global_option_name' );
@@ -63,7 +64,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-global' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_dashboard_page(){
         $this->options = get_option( 'wpui_dashboard_option_name' );
@@ -73,7 +74,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-dashboard' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_admin_menu_page(){
         $this->options = get_option( 'wpui_admin_menu_option_name' );
@@ -83,7 +84,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-menu' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_admin_bar_page(){
         $this->options = get_option( 'wpui_admin_bar_option_name' );
@@ -93,17 +94,17 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-bar' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_editor_page(){
         $this->options = get_option( 'wpui_editor_option_name' );
         ?>
         <form method="post" action="options.php" class="wpui-option">
-        <?php settings_fields( 'wpui_editor_option_group' );
-        do_settings_sections( 'wpui-settings-admin-editor' );
+        <?php settings_fields( 'wpui_import_export_option_group' );
+        do_settings_sections( 'wpui-settings-import-export' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_metaboxes_page(){
         $this->options = get_option( 'wpui_metaboxes_option_name' );
@@ -127,7 +128,7 @@ class wpui_options
 
         <?php submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_columns_page(){
         $this->options = get_option( 'wpui_columns_option_name' );
@@ -152,7 +153,7 @@ class wpui_options
             </div>
             <?php submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_profil_page(){
         $this->options = get_option( 'wpui_profil_option_name' );
@@ -162,7 +163,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-profil' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_plugins_page(){
         $this->options = get_option( 'wpui_plugins_option_name' );
@@ -172,7 +173,7 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-plugins' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
     }
     function wpui_roles_page(){
         $this->options = get_option( 'wpui_roles_option_name' );
@@ -182,7 +183,44 @@ class wpui_options
         do_settings_sections( 'wpui-settings-admin-roles' );
         submit_button(); ?>
         </form>
-        <?
+        <?php
+    }    
+    function wpui_import_export_page(){
+        $this->options = get_option( 'wpui_import_export_option_name' );
+        ?>
+        <div class="metabox-holder">
+            <div class="postbox">
+                <h3><span><?php _e( 'Export Settings' ); ?></span></h3>
+                <div class="inside">
+                    <p><?php _e( 'Export the plugin settings for this site as a .json file. This allows you to easily import the configuration into another site.' ); ?></p>
+                    <form method="post">
+                        <p><input type="hidden" name="wpui_action" value="export_settings" /></p>
+                        <p>
+                            <?php wp_nonce_field( 'wpui_export_nonce', 'wpui_export_nonce' ); ?>
+                            <?php submit_button( __( 'Export' ), 'secondary', 'submit', false ); ?>
+                        </p>
+                    </form>
+                </div><!-- .inside -->
+            </div><!-- .postbox -->
+
+            <div class="postbox">
+                <h3><span><?php _e( 'Import Settings' ); ?></span></h3>
+                <div class="inside">
+                    <p><?php _e( 'Import the plugin settings from a .json file. This file can be obtained by exporting the settings on another site using the form above.' ); ?></p>
+                    <form method="post" enctype="multipart/form-data">
+                        <p>
+                            <input type="file" name="import_file"/>
+                        </p>
+                        <p>
+                            <input type="hidden" name="wpui_action" value="import_settings" />
+                            <?php wp_nonce_field( 'wpui_import_nonce', 'wpui_import_nonce' ); ?>
+                            <?php submit_button( __( 'Import' ), 'secondary', 'submit', false ); ?>
+                        </p>
+                    </form>
+                </div><!-- .inside -->
+            </div><!-- .postbox -->
+        </div><!-- .metabox-holder -->
+    <?php
     }
 
     /**
@@ -214,7 +252,7 @@ class wpui_options
 				</div>
 			</div>
             <div class="wpui-sidebar">	
-        
+
             </div>
         <?php
     }
@@ -295,6 +333,12 @@ class wpui_options
         register_setting(
             'wpui_roles_option_group', // Option group
             'wpui_roles_option_name', // Option name
+            array( $this, 'sanitize' ) // Sanitize
+        );        
+
+        register_setting(
+            'wpui_import_export_option_group', // Option group
+            'wpui_import_export_option_name', // Option name
             array( $this, 'sanitize' ) // Sanitize
         );
 
@@ -1438,14 +1482,6 @@ class wpui_options
             'wpui-settings-admin-roles', // Page
             'wpui_setting_section_roles' // Section            
         );
-
-        // add_settings_field(
-        //     'wpui_roles_list_cap', // ID
-        //    __("Apply settings to specific capabilities:","wpui"), // Title
-        //     array( $this, 'wpui_roles_list_cap_callback' ), // Callback
-        //     'wpui-settings-admin-roles', // Page
-        //     'wpui_setting_section_roles' // Section            
-        // );
     }
 
     /**
@@ -3611,39 +3647,6 @@ class wpui_options
             }
         }
     }
-
-    // public function wpui_roles_list_cap_callback()
-    // {
-    //     $options = get_option( 'wpui_roles_option_name' );  
-
-    //     global $wp_roles;
-        
-    //     $rroles = $wp_roles->get_names();
-        
-    //     foreach ($rroles as $rrole_key => $rrole_value) {
-    //         $te = array($rrole_key);
-    //         foreach ($te as $value) {
-    //             $options = get_option( 'wpui_roles_option_name' ); 
-    //             print_r($options);
-    //             echo '<br/><br/>';
-    //         }  
-    //     }
-       
-        // foreach ($wpui_roles as $wpui_role_key => $wpui_role_value) {
-            
-        //     $check = isset($options['wpui_roles_list_cap'][$wpui_role_key]);
-
-        //     echo '<input id="wpui_roles_list_cap'.$wpui_role_key.'" name="wpui_option_name[wpui_roles_list_cap]['.$wpui_role_key.']" type="checkbox"';
-        //     if ($wpui_role_key == $check) echo 'checked="yes"'; 
-        //     echo ' value="'.$wpui_role_key.'"/>';
-        //     echo '<label for="wpui_roles_list_cap'.$wpui_role_key.'">'.$wpui_role_value.'</label>';
-
-        //     if (isset($this->options['wpui_roles_list_cap'][$wpui_role_key])) {
-        //         esc_attr( $this->options['wpui_roles_list_cap'][$wpui_role_key]);
-        //     }
-        // }
-    // }
-
 }
 	
 if( is_admin() )
